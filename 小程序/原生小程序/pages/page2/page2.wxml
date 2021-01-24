@@ -1,0 +1,3 @@
+<!--pages/page2.wxml-->
+<text>第二页</text>
+<button type="primary" bindtap="btnTap">回到第一页</button>

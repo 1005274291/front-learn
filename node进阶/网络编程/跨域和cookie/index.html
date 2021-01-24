@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <form action="/api/save" method="POST">
+        <input type="text" name="abc" value="456">
+        <input type="submit" value="save">
+    </form>
+    <!-- <script>
+        (async ()=>{
+            // axios.defaults.baseURL="http://localhost:4000"
+            axios.defaults.withCredentials=true//在axios默认是不传递cookie的
+            const res=await axios.get("/api/users",{
+                headers:{
+                    "X-Token":"junbaobao"
+                }
+            })
+            console.log(res.data)
+            document.writeln(`response:${JSON.stringify(res.data)}`)
+
+            // const img =new Image() //不通过xhr也可以实现无刷新更新页面 埋点 序列化 异常监控 性能监控
+            // img.src="/api/user?abc=123"
+        })()
+    </script> -->
+</body>
+</html>

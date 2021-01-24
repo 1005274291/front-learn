@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "koa": "^2.13.0",
+    "mongoose": "^5.11.2"
+  }
+}

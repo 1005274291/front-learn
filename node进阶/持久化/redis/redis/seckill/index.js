@@ -1,0 +1,88 @@
+const Koa = require("koa");
+const app = new Koa();
+const Router = require("koa-router");
+const redis = require("redis");
+const redisClient = redis.createClient(6379, "localhost");
+
+const wrapper = require("co-redis");
+const client = wrapper(redisClient);
+
+client.on("ready", () => {
+  console.log("redis ready ...");
+});
+
+// 首页路由
+const router = new Router();
+router.get("/", (ctx) => {
+  ctx.response.type = "html";
+  ctx.response.body = fs.createReadStream("./index.html");
+});
+
+router.get("/create", async (ctx) => {
+
+  // 清空商品
+  await client.ltrim("goods", -1, 0);
+
+  // 创建商品队列，添加30个商品
+  new Array(30).fill().forEach(async (v, i) => {
+    await client.rpush("goods", i);//添加队列
+    console.log("添加商品:", i);
+  });
+
+  // redis llen
+  const num = await client.llen("goods");
+  console.log("抢购商品数量:", num);
+
+  ctx.body = {
+    ok: 1,
+  };
+});
+
+/**
+ * 秒杀
+ */
+router.get("/buy", async (ctx) => {
+  // 产生一个随机数当做用户id
+  const uid = (Math.random() * 9999999).toFixed();
+  let pid = await client.lpop("goods");//从队列中取出一个商品
+
+  // 判断库存
+  if (pid) {
+    //创建订单采用哈希表存储对应关系 key是商品id value是用户id
+    await client.hset("orders", pid, uid);
+    console.log("订单生成", pid, uid);
+  }else {
+    console.log('已抢光')
+  }
+
+  ctx.body = { ok: 1 };
+});
+
+router.get("/order", async (ctx) => {
+  const keys = await client.hkeys("orders");//取出订单表的所有key值
+  console.log('订单列表')
+  console.log('===========')
+  const orders = await client.hgetall('orders')
+  for (k of keys) {
+    console.log(`${k} => ${await client.hget("orders", k)}`);
+  }
+
+  ctx.body = {
+    orders
+  };
+});
+
+router.get('/order/clear',async ctx => {
+  const keys = await client.hkeys("orders");
+  for (k of keys) {
+    console.log(`删除订单: ${k} => ${await client.hdel("orders", k)}`);
+  }
+  ctx.body = {ok : 1}
+})
+
+app.use(router.routes());
+
+// 监听端口
+app.listen(3000, () => {
+  console.log("listening on *:3000");
+});

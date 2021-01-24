@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./myvue1.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{counter}}</p>
+        <p>{{counter}}</p>
+        <p>{{name}}</p>
+        <p k-text="counter"></p>
+        <p k-html="desc"></p>
+        <p @click="changeCounter(5,2)">点击我数字相加</p>
+        <input type="text" k-model="name" @input="changeName"/>
+    </div>
+    <script>
+        const app=new MyVue({
+            el:'#app',
+            data:{
+                counter:1,
+                name:"jiangjun",
+                desc:"<span style='color:red'>myvue</span>"
+            },
+            methods:{
+                changeCounter(a,b){
+                    this.counter+=a*b
+                },
+                changeName(e){
+                    this.name=e.target.value
+                }
+            }
+        })
+        setInterval(() => {
+            app.counter+=1
+        }, 1000);
+    </script>
+</body>
+</html>

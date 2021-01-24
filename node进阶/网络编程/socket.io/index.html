@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/socket.io.js"></script>
+</head>
+<body>
+    发送文字按回车结束
+    <input type="text" value="" id="input">
+    <script>
+        var username=prompt("请输入你的名字")
+        var socket=io.connect()//向服务端进行建立连接
+        socket.on("welcome",function(data){
+            console.log(data+":"+username)
+        })
+        socket.emit("userjoin",username)
+        socket.on("newmsg",function(data){
+            console.log("-"+data)
+        })
+        // socket.on("someoneconnect",function(){
+        //     console.log("新用户加入")
+        // })
+        var sendnewmsg=function(msg){
+            socket.emit("sendnewmsg",username+":"+msg)
+        }
+        var inp=document.getElementById("input")
+        document.addEventListener("keydown",function(e){
+            if(e.keyCode ==13){
+                var val=inp.value
+                if(val=="") return
+                sendnewmsg(val)
+                inp.value=""
+            }
+        })
+    </script>
+</body>
+</html>

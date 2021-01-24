@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,user-scalable=0"
+    />
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0-0/axios.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/qs/6.9.4/qs.js"></script>
+    <!-- 调用jssdk的wx对象 -->
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <style>
+      /* .cube-btn {
+            margin: 10px 0;
+        } */
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <button @click="getTokens">getTokens</button>
+      <button @click="getFollowers">getFollowers</button>
+      <button @click="getJSConfig">getJSConfig</button>
+      <button @click="getAuth">getAuth</button>
+      <button @click="getUser">getUser</button>
+    </div>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        methods: {
+          async getTokens() {
+            const res = await axios.get(`/getTokens`);
+            console.log("res", res);
+          },
+          async getFollowers() {
+            const res = await axios.get(`/getFollowers`);
+            console.log("res", res);
+          },
+          async getJSConfig() {//微信jssdk是开发者在网页上通过js代码使用微信原生功能的工具包，开发者可以使用它在网页上录制和播放微信语音，监听微信分享，上传手机本地图片和拍照等能力（运行于微信内置浏览器的网页，调用微信原生应用）
+            //掉用jssdk
+            console.log("wx", wx); //拿到wx对象
+            let res = await axios.get("/getJSConfig", {
+              params: {
+                url: window.location.href, //将前端路由发送过去
+              },
+            });
+            console.log("res", res.data);
+            res.data.jsApiList = ["onMenuShareTimeline"]; //如果还需要调用其它的能力在这里列举
+            //认证
+            wx.config(res.data);
+            //认证成功会走到ready中
+            wx.ready(function () {
+              console.log("wx.ready...");
+              // 获取网络地址 4g|wifi等
+              wx.getNetworkType({//调用jssdk
+                success: function (res) {
+                  var getNetworkType = res.networkType;
+                  console.log("getNetworkType...", networkType);
+                },
+              });
+            });
+          },
+          async getAuth() {
+            window.location.href = "/wxAuthorize";
+          },
+          async getUser() {
+              const qs=Qs.parse(window.location.search.substr(1))
+              const openid=qs.openid
+              const res=await axios.get("/getUser",{
+                  params:{
+                      openid
+                  }
+              })
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

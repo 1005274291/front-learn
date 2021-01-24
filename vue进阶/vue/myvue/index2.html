@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./myvue2.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+    <script>
+        const app=new MyVue({
+            el:"#app",
+            data:{
+                counter:1
+            },
+            render(h){
+                return h("div",{id:'app'},[
+                    h("p",null,this.counter+"")
+                ])
+            }
+        })
+        setInterval(() => {
+            app.counter++
+        }, 1000);
+    </script>
+</body>
+</html>
