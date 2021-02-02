@@ -99,8 +99,12 @@ interface ClockInterface{
     current:Date
     setTime(d:Date)
 }
+type obj={//生命一个类型
+    name?:String
+}
 
 class Clock implements ClockInterface{
+    //重新实现接口中的函数体
     current:Date
     setTime(d:Date){
         this.current=d

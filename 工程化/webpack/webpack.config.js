@@ -3,7 +3,7 @@ const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const minicss = require("mini-css-extract-plugin");
-const Txt=require("./myPlugins/txt-webpack-plugin")
+const Txt = require("./myPlugins/txt-webpack-plugin");
 // console.log(process.env)
 module.exports = {
   // webpack执行构建入口
@@ -23,11 +23,13 @@ module.exports = {
     modules: ["./node_modules", "./myloaders"],
   },
   devtool: "cheap-module-eval-source-map",
-  resolve:{
-    alias:{//配置别名
-      css:path.join(__dirname,"src/css")
+  resolve: {
+    alias: {
+      //配置别名
+      css: path.join(__dirname, "src/css"),
     },
-    // extensions: [".jsx", ".js", "json","css","less"] //可以不用写后缀名
+    modules: [path.resolve(__dirname, "./node_modules")], //规定webpack去哪找第三方模块
+    // extensions: [".jsx", ".js", "json","css","less"] //可以不用写后缀名 优化开发体验，提升打包时间
   },
   devServer: {
     contentBase: "./public", //打包好的路径
@@ -61,13 +63,19 @@ module.exports = {
       // },
       {
         test: /\.js$/,
-        exclude: /node_modules/,//排除库中的js文件
-        use: {
-          loader: "babel-loader",
-        },
+        exclude: /node_modules/, //排除库中的js文件
+        use: [
+          {
+            loader: "thread-loader", //开启多线程构建 将loader放置在worker池里运行
+          },
+          {
+            loader: "babel-loader",
+          },
+        ],
       },
       {
         test: /\.css$/, //匹配规则 处理css文件
+        include: path.resolve(__dirname, "./src"), //规定使用这个loader的文件去哪里找
         use: [
           // {
           //   loader:"style-loader",
@@ -122,7 +130,7 @@ module.exports = {
       },
       {
         test: /\.(eot|ttf|woff|woff2|svg)$/, //处理字体
-        exclude:[path.resolve(__dirname,"./src/svg")],
+        exclude: [path.resolve(__dirname, "./src/svg")], //规定loader排除掉哪里的文件
         use: {
           loader: "url-loader",
           options: {
@@ -132,14 +140,14 @@ module.exports = {
         },
       },
       {
-        test:/\.svg$/,
-        use:{
-          loader:"svg-sprite-loader",
-          options:{
-            symbolId:"icon-[name]"//引用图标的时候用#icon-egg
-          }
-        }
-      }
+        test: /\.svg$/,
+        use: {
+          loader: "svg-sprite-loader",
+          options: {
+            symbolId: "icon-[name]", //引用图标的时候用#icon-egg
+          },
+        },
+      },
     ],
   },
   plugins: [
@@ -154,8 +162,7 @@ module.exports = {
       //插件将css抽离成独立的文件，以loader的形式加载
       filename: "css/[name]-[contenthash:8].css", //name是入口的chunk名称
     }),
-    new Txt()
+    new Txt(),
     // new webpack.HotModuleReplacementPlugin() 热更新不能使用chunkhash和contenthash
   ],
 };
-
