@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        // createRenderer()=>renderer=>renderer.createApp()<=createAppAPI()
+        // vue.createApp=>renderer.createApp()
+        //3. 实现createAppAPI
+        const createAppAPI=(render)=>{
+            return  function createApp(rootComponent){
+                const app={
+                    mount(rootContainer){
+                        // 挂载vnode => dom 
+                        // 获取vnode 应该通过createVnode生成
+                        const vnode={
+                            tag:rootComponent //传入根组件的配置
+                        }
+                        // 渲染
+                        render(vnode,rootContainer)
+                    }
+                }
+                return app
+            }
+        }
+        //2. 实现renderer工厂函数
+        const createRenderer=options=>{
+            const patch=(n1,n2,contatiner)=>{
+                // 根组件配置 n2是根vnode
+                const rootComponent=n2.tag
+                const ctx={...rootComponent.data()}
+                // 执行render获取vnode
+                const vnode=rootComponent.render.call(ctx)
+                // 转换vnode到dom
+                const parent=options.querySelector(contatiner)
+                const child =options.createElement(vnode.tag)
+                if(typeof vnode.children=='string'){
+                    child.textContent=vnode.children
+                }else{
+                    // array
+                }
+                options.insert(child,parent)
+            }
+            const render=(vnode,contatiner)=>{
+                // 判断container的上面没有虚拟dom则执行patch
+                patch(contatiner._vnode||null,vnode,contatiner)
+                contatiner._vnode=vnode
+            }
+            // 该对象就是renderer
+            return {
+                render,
+                createApp:createAppAPI(render)
+            }
+        }
+        //  传递参数选项获取渲染器
+        const renderer=createRenderer({
+            querySelector(sel){
+                return document.querySelector(sel)
+            },
+            createElement(tag){
+                return document.createElement(tag)
+            },
+            insert(child,parent){
+                parent.appendChild(child)
+            }
+        })
+        //1. createApp
+        const Vue={
+            createApp(options){
+                // 执行的实际是renderer.createApp()
+                return renderer.createApp(options)
+            }
+        }
+        Vue.createApp({
+            data(){
+                return {
+                    foo:'hello,vue3'
+                }
+            },
+            render(){
+                return{
+                    tag:'h2',
+                    children:this.foo
+                }
+            }
+        }).mount("#app")
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p @click="add">{{state.counter}}</p>
+        <p>{{state.doubleCounter}}</p>
+        <div>x: {{ x }} y: {{ y }}</div>
+        <p>time: {{time}}</p>
+    </div>
+    <script src="../dist/vue.global.js"></script>
+    <script>
+        const { createApp, reactive, computed, onMounted, onUnmounted, toRefs,ref } = Vue
+        // Vue2中的updateComponent等价于Vue3中的setupRenderEffect()
+        // setupComponent(instance) 将组件安装一下=》setupRenderEffect() 依赖收集=》effect(fn) 将传入的fn和它内部调用的响应式数据产生映射关系 数据变化会重新执行fn
+        // fn中会调用rootComponent.render() 初始化触发响应式的收集依赖 调用patch更新
+        // vue3生命周期中 beforeCreate,created=>setup() beforeMount=>onBeforeMount mounted=>onMounted beforeUpdate=>onBeforeUpdate update=>onUpdate beforeDestroy=>onBeforeUnmount destroyed=>onUnmounted errorCapture=>onErrorCaptured
+        createApp({
+            setup(props, { emit, slots, attrs }) {
+                //对象的响应式
+                const state = reactive({
+                    counter: 0,
+                    doubleCounter: computed(() => state.counter * 2)
+                })
+                function add() {
+                    state.counter++
+                }
+                // 生命周期
+                onMounted(() => {
+                    console.log("mounted")
+                })
+                // 使⽤⿏标逻辑
+                const { x, y } = useMouse()
+                // 使⽤时间逻辑
+                const { time } = useTime()
+                //other data  使得数据和方法不分家，可以封装成函数复用
+                return { //暴露给render 没有this，直接通过暴露的接口调用
+                    state,
+                    add,
+                    x,
+                    y,
+                    time
+                }
+            }
+        }).mount('#app')
+        // 鼠标位置侦听
+        function useMouse() {
+            // 数据响应化
+            const state = reactive({ x: 0, y: 0 })
+            const update = e => {
+                state.x = e.pageX
+                state.y = e.pageY
+            }
+            onMounted(() => {
+                window.addEventListener('mousemove', update)
+            })
+            onUnmounted(() => {
+                window.removeEventListener('mousemove', update)
+            })
+            // 转换所有key为响应式数据
+            return toRefs(state)
+        }
+        // 时间监测
+        function useTime() {
+            const state = reactive({ time: new Date() })
+            onMounted(() => {
+                setInterval(() => {
+                    state.time = new Date()
+                }, 1000)
+            })
+            return toRefs(state)//将state每一个key都变成响应式导出 ref是单值响应式需要 变量名.value访问
+        }
+    </script>
+</body>
+
+</html>

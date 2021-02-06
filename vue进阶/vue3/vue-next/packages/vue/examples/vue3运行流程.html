@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{title}}</p>
+        <p>{{myfoo}}</p>
+        <comp></comp>
+    </div>
+    <script src="../dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue
+        // createApp 创建实例 将所有静态方法变为实例方法，不需要的就不会打包进来 
+        // 初始化时 createApp()=>mount()=>render()=>patch()=> 在以前的vnode=null时 处理根组件走processComponent()=>mountComponent()挂在根组件
+        // 创建根实例instance ctx存储着以前的$静态方法 存储生命周期 =>setupComponent(instance) 将组件安装一下 初始化属性和插槽=> 如果是状态组件
+        // setupStatefulComponent(instance,isSSR) 处理响应式数据 将instance.ctx代理到instance.proxy call调用setup并传入参数=>handleSetupResult() 生成渲染函数=>finishComponentSetup()兼容vue2的options
+        // setupRenderEffect()依赖收集
+        // componentOptions
+        createApp({
+            props: {
+                foo: {
+                    type: String
+                }
+            },
+            setup(props, { emit, slots, attrs }) {
+                // setup 会先处理vue3，然后兼容vue2
+                return {
+                    title: ref("hello,vue3"),
+                    myfoo: props.foo
+                }
+            }
+        }, { foo: 'bar' })//像根组件传递props
+            .component('comp', {
+                template: "<div>comp!</div>"
+            })//链式调用在根组件定义组件，相当于全局组件
+            .mount("#app")
+    </script>
+</body>
+
+</html>
