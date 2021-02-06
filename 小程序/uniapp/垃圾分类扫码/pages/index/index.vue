@@ -41,7 +41,7 @@
 			//2. 图片路径转base64
 			image2base64(path) {
 				//条件编译，针对打包环境类型进行有选择的编译
-				#// #ifdef APP-PLUS
+				// #ifdef APP-PLUS
 				console.log("Native")
 				plus.io.resolveLocalFileSystemURL(path,(entry)=>{
 					entry.file((file)=>{
