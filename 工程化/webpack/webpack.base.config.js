@@ -5,6 +5,11 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
   entry: {
     main: "./src/index/index.js",
+    // index:{//对于引入第三方模块 需要进行代码分割对第三方模块进行单独打包
+    //   import:"./src/index/index.js",
+    //   dependOn:"axios"
+    // },
+    // axios:"axios"//会去node_modules中找
   },
   // 构建完成的出口
   output: {
@@ -13,6 +18,11 @@ module.exports = {
     // 输出的文件存放的路径，必须是绝对路径
     path: path.resolve(__dirname, "./public"),
   },
+  // externals:{
+  //   // 通过external加载外部cdn资源使打包的项目体积更小
+  //   vue:"Vue",//分别对应自己项目的main.js中引入的文件名
+  //   //并在打包好目录下的index.html文件引入cdn对应的js和css <script src="https://staticfile.org/vue/2.6.11/vue.min.js"></script>
+  // },
   module: {
     //对所有模块的处理
     rules: [
