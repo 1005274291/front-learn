@@ -17,7 +17,7 @@ class MyVue {
         const updateComponent = () => {
             // 获取渲染函数
             const { render } = this.$options
-            const vnode = render.call(this, this.$createElement)
+            const vnode = render.call(this, this.$createElement)//触发收集依赖
             // 将vnode变成dom
             this._update(vnode)
 
@@ -240,3 +240,8 @@ class Watcher {
         this.get()
     }
 }
+
+//先对data中的对象进行defineReactive监听，在执行初始化渲染时会创建一个watcher和更新函数并访问代理到的data，并触发依赖手机添加watcher
+//有多少个对象就有多少个observe 有多少key就有多少dep 有多少组件就有多少watcher 
+//如果data中的值是数组或对象还会有大dep来处理不被监听到的对象操作和数组操作。$attrs和$listeners也会创建dep来进行响应式处理
+//$watch创建一个会创建一个watcher

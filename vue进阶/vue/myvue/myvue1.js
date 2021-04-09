@@ -31,7 +31,7 @@ class Observer {
         })
     }
 }
-// 响应式
+// 响应式 
 function defineReactive(obj, key, value) {
     observe(value) //递归遍历使对象响应式
     const dep = new Dep()
@@ -203,3 +203,7 @@ class Watcher {
         this.updateFn.call(this.vm, this.vm[this.key])
     }
 }
+
+
+//一个组件的data一个Observe defineReactive代理data中的所有key 一个key对应一个dep 一个dep管理很多watcher 一个watcher对应一个元素
+//如果代理的值还是对象会递归的Observe
