@@ -1,0 +1,23 @@
+<html>
+    <body>
+        <pre id="main"></pre>
+    </body>
+    <script>
+        const main = document.querySelector('#main');
+        const callback = (i, fn) => () => {
+            console.log(i)
+            main.innerText += fn(i);
+        };
+        let i = 1;
+        while(i++ < 50) {
+            setTimeout(callback(i, (i) => '\n' + i + '<'))
+        }
+        console.log(i)
+
+        while(i++ < 100) {
+            Promise.resolve().then(callback(i, (i) => i +','))
+        }
+        console.log(i)
+        main.innerText += '[end ' + i + ' ]\n'
+</script>
+</html>
