@@ -1,0 +1,21 @@
+{
+  "name": "micro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:base": "node server.js",
+    "dev:app1": "node app1/server1.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "npm-run-all": "^4.1.5"
+  },
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
