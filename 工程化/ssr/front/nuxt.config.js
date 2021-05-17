@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'front',
+    title: '小开社区',
     htmlAttrs: {
       lang: 'en'
     },
@@ -22,7 +22,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    "@/plugins/axios"
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -34,10 +35,21 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    "@nuxtjs/axios",
+    "@nuxtjs/proxy"
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
+  },
+  proxy:{
+    "/api/":{
+      target:"http://localhost:8080",
+      secure:false,
+      pathRewrite:{
+        '^/api':""
+      }
+    }
   }
 }
