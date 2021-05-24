@@ -109,7 +109,6 @@ export default {
         },
         async sendEmailCode(){
             //请求邮箱验证码接口
-            await this.$http.get("/sendcode?email="+this.form.email)
             this.send.timer=10
             this.timer=setInterval(() => {
                 this.send.timer -=1
@@ -117,6 +116,8 @@ export default {
                     clearInterval(this.timer)
                 }
             }, 1000);
+            await this.$http.get("/sendcode?email="+this.form.email)
+            
         }
     }
 }

@@ -9,6 +9,9 @@ module.exports = app => {
   router.get('/', controller.home.index)
   router.get("/captcha",controller.utils.captcha)
   router.get("/sendcode",controller.utils.sendcode)
+  router.post("/uploadfile",controller.utils.uploadfile)
+  router.post("/mergefile",controller.utils.mergefile)
+  router.post('/checkfile',controller.utils.checkfile)
   //使用egg-router-group插件进行分组路由
   router.group({name:'user',prefix:'/user'},(router)=>{
     const {info,register,login,verify}=controller.user
