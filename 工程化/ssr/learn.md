@@ -5,3 +5,9 @@
 + 在工程化上
     + 采用husky进行对git hook的设置对commit进行拦截
     + 采用commitizen进行对git commit注释的规范化
++ 富文本编译器发展史
+    1. <\div contenteditable>hha<\/div>
+    2. 第三方库 tinyMce，wangEditor
+    3. 开源定制库 slate.js
+    4. 专门的编译器开发团队，非常复杂，计算位置，样式和实现简易的浏览器工作量差不多
++ scoped是css封装，组件外部使用时只能在不设置scoped的style标签修改组件

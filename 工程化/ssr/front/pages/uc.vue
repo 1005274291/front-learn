@@ -52,6 +52,7 @@
 import sparkMd5 from "spark-md5";
 const CHUNK_SIZE = parseInt(0.05 * 1024 * 1024); //一1mb为单位进行文件切片
 export default {
+  layout:"login",
   async mounted() {
     const ret = await this.$http.get("/user/info"); //获取用户信息并发送token
     console.log(ret);

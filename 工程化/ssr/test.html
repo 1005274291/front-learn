@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style scoped>
+        body{
+            height: 200px;
+        }
+        .kkb-list-container{
+            height: 100%;
+            overflow: auto;
+            position: relative;
+        }
+        .kkb-list-phantom{
+            height: 1000px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            z-index: -1;
+        }
+        .kkb-list{
+            position: absolute;
+            left: 0;
+            top: 0px;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="kkb-list-container" >
+        <div class="kkb-list-phantom" ></div>
+        <div class="kkb-list" >
+            <div >这是1</div>
+            <div >这是2</div>
+            <div >这是3</div>
+            <div >这是4</div>
+            <div >这是5</div>
+            <div >这是6</div>
+            <div >这是7</div>
+            <div >这是8</div>
+            <div >这是9</div>
+            <div >这是10</div>
+            <div >这是11</div>
+        </div>
+    </div>
+    <script>
+        let container =document.getElementsByClassName('kkb-list-container')[0]
+        let list=document.getElementsByClassName('kkb-list')[0]
+        let startOffset=0
+        container.addEventListener('scroll',()=>{
+            let scrollTop=container.scrollTop
+            startOffset=scrollTop-(scrollTop%21)
+            console.log(scrollTop,startOffset)
+            list.style.top=`${startOffset}px`
+        })
+    </script>
+</body>
+</html>
