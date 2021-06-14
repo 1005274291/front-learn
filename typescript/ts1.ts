@@ -22,170 +22,198 @@ function tell(): void {
     //没有返回值
 }
 
-function add(x:string,y?:number,z="123",...arg:number[]):string{
+function add(x: string, y?: number, z = "123", ...arg: number[]): string {
     //在参数中加?表示可选参数 =表示默认参数 ...表示可变参数
-    return x+y
+    return x + y
 }
 // 参数意义声明
-var my:(name:string,age:number)=>number=function(n:string,a:number):number{
+var my: (name: string, age: number) => number = function (n: string, a: number): number {
     return//n是name，a是age的意思
 }
 
 //类的创建
-class Person{
+class Person {
     // 共有属性（默认属性）
-    public name:string;
+    public name: string;
     // 私有属性（只能在类内部访问 不能通过外部和继承访问）
-    private _age:number;
+    private _age: number;
     // 静态属性只能通过类名调用
-    static level:number;
-    constructor(name:string,age:number){
-        this.name =name
-        this._age=age
+    static level: number;
+    constructor(name: string, age: number) {
+        this.name = name
+        this._age = age
     }
     // 保护属性 （只能在类内部和子类中访问）
-    protected print(){
-        return this.name+":"+this.age+Person.level
+    protected print() {
+        return this.name + ":" + this.age + Person.level
     }
-    set age(newage:number){
-        this._age=newage
+    set age(newage: number) {
+        this._age = newage
     }
-    get age():number{
+    get age(): number {
         return this._age
     }
 }
 // 声明变量是什么类
-var p:Person=new Person("jun",18)
+var p: Person = new Person("jun", 18)
 // 类得继承
-class Student extends Person{
+class Student extends Person {
     // 只读属性
-    readonly school:string="shiyan"
-    constructor(school:string){
-        super("jiang",20)
-        this.school=school
+    readonly school: string = "shiyan"
+    constructor(school: string) {
+        super("jiang", 20)
+        this.school = school
     }
 }
 
 // 接口
-interface LabelValue{
-    label:string
+interface LabelValue {
+    label: string
     //可选参数
-    age?:number
+    age?: number
 }
-function printLabel(labelObj:LabelValue){
+function printLabel(labelObj: LabelValue) {
     console.log(labelObj.label)
 }
 // function printLabel(labelObj:{label:string}){
 //     //同上一样
 // }
-var myObj={label:"hello",name:"jun"}
+var myObj = { label: "hello", name: "jun" }
 printLabel(myObj)
 
-interface SearchFunc{
+interface SearchFunc {
     // 对函数的约束
-    (source:string,subString:string):boolean
+    (source: string, subString: string): boolean
 }
-var mySearch:SearchFunc
-mySearch=function(src:string,sub:string){
+var mySearch: SearchFunc
+mySearch = function (src: string, sub: string) {
     return !!src.search(sub)
 }
-interface StringArray{
+interface StringArray {
     // 对数组进行约束
-    [index:number]:string
+    [index: number]: string
 }
-var arr:StringArray=["","123"]
+var arr: StringArray = ["", "123"]
 // 类接口
-interface ClockInterface{
-    current:Date
-    setTime(d:Date)
+interface ClockInterface {
+    current: Date
+    setTime(d: Date)
 }
-type obj={//生命一个类型
-    name?:String
+type obj = {//声明一个类型
+    name?: String
 }
 
-class Clock implements ClockInterface{
+class Clock implements ClockInterface {
     //重新实现接口中的函数体
-    current:Date
-    setTime(d:Date){
-        this.current=d
+    current: Date
+    setTime(d: Date) {
+        this.current = d
     }
 }
 // 接口多继承
-interface Square extends ClockInterface,LabelValue{
-    sidLength:number
+interface Square extends ClockInterface, LabelValue {
+    sidLength: number
 }
-var s=<Square>{}
+var s = <Square>{}
 // 混合接口
-interface Counter{
-    inter:number
-    reset():void
-    (start:number):string
+interface Counter {
+    inter: number
+    reset(): void
+    (start: number): string
 }
-var d:Counter
+var d: Counter
 
 // 泛型
-function Hello<T>(arg:T):T{
+function Hello<T>(arg: T): T {
     return arg
 }
 // 在函数调用的时候传入类型
-var output=Hello<string>("123")
+var output = Hello<string>("123")
 
 // 泛型数组
-function Hello1<T>(str:T[]):T[]{
+function Hello1<T>(str: T[]): T[] {
     return str
 }
-var list:Array<string>=Hello1<string>(["1","2"])
+var list: Array<string> = Hello1<string>(["1", "2"])
 // 泛型函数
-interface Hello2<T>{
-    (arg:T):T
+interface Hello2<T> {
+    (arg: T): T
 }
-function myhello<T>(arg:T):T{
+function myhello<T>(arg: T): T {
     return arg
 }
-var mh:Hello2<number>=myhello
+var mh: Hello2<number> = myhello
 alert(mh(100))
 
 // 泛型类
 class HelloNumber<T>{
-    Ten:T;
-    add:(x:T,y:T)=>T;
+    Ten: T;
+    add: (x: T, y: T) => T;
 }
-var mynum=new HelloNumber<number>()
-mynum.Ten=10
+var mynum = new HelloNumber<number>()
+mynum.Ten = 10
 
+
+//泛型约束
+interface Lengthwise {
+    length: number;
+}
+
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+    console.log(arg.length);  // Now we know it has a .length property, so no more error
+    return arg;
+}
 // 模块
-module Vali{
-    export interface StringV{
-        isAcce(s:string):boolean
+module Vali {
+    export interface StringV {
+        isAcce(s: string): boolean
     }
-    export class Letter implements StringV{
-        isAcce(s:string){
+    export class Letter implements StringV {
+        isAcce(s: string) {
             return true
         }
     }
 }
-var a=new Vali.Letter()
+var a = new Vali.Letter()
 a.isAcce("123")
 
 // 命名空间
-namespace Shapes{
-    export namespace Ply{
-        export class Trangle{}
-        export class Square{}
+namespace Shapes {
+    export namespace Ply {
+        export class Trangle { }
+        export class Square { }
     }
 }
-import polygons =Shapes.Ply
-let sq=new polygons.Square()
+import polygons = Shapes.Ply
+let sq = new polygons.Square()
 
 
 //tsc --target ES5 --experimentalDecorators  让ts支持装饰器
 
 // 混入
-applyMixins(Person,[Clock])
-function applyMixins(derivedCtor:any,baseCtors:any[]){
-    baseCtors.forEach(baseCtor=>{
-        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name=>{
-            derivedCtor.prototype[name]=baseCtor.prototype[name]
+applyMixins(Person, [Clock])
+function applyMixins(derivedCtor: any, baseCtors: any[]) {
+    baseCtors.forEach(baseCtor => {
+        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+            derivedCtor.prototype[name] = baseCtor.prototype[name]
         })
     })
 }
+
+
+// 抽象类，抽象类只能被继承，不能被实例化
+abstract class Da {
+    abstract say()
+}
+
+class da extends Da {
+    say() {
+        console.log('实现抽象类当中定义的属性名')
+    }
+}
+
+//declare 可以创建 *.d.ts 文件中的变量，declare 只能作用域最外层 生成一个类型文件供js进行静态类型检查
+//DefinitelyTyped 就是让你把 “类型定义文件(*.d.ts)”，发布到 npm 中，配合编辑器(或插件)，就能够检测到 JS 库中的静态类型。
+// 类型定义文件的以 .d.ts 结尾，里面主要用来定义类型
+
+

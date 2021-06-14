@@ -1,14 +1,19 @@
 {
     "compilerOptions": {
-        "outDir": "./dist",
+        "outDir": "./dist",//编译好的文件目录
         "target": "es2017",
         "module": "commonjs",//组织代码方式
-        "sourceMap": true,
+        "sourceMap": true,//信息文件存储位置
         "moduleResolution": "node",//模块解决策略
         "experimentalDecorators": true,//开启在装饰器定义
         "allowSyntheticDefaultImports": true,//允许es6方式import
         "lib": ["es2015"],
         "typeRoots": ["./node_modules/@types"],
+        "removeComments":true,//去掉注释
+        "strict": true,//书写规范
+        "noImplicitAny": true,//允许你的注解类型any不用特意标明
+        "strictNullChecks": false,//默认是true undefined和null是任何类型的子类型,所以可以被赋值给其他类型
+        "rootDir": "./src"
     },
     "include": ["src/**/*"]
 }

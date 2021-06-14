@@ -11,7 +11,7 @@
         //17当中react在做事件委托的时候将监听器挂载到根容器上（例如root）,不会和其他框架产生影响也方便后续的升级和维护
         //17对事件系统的修改，onscroll事件不在冒泡，onFocus和onBlur事件采用原生的focusin和focusout事件
         //捕获事件（如onClickCapture）使用的是浏览器中的捕获监听器
-        //去除了事件池不需要调用e.persist()
+        //去除了事件池不需要调用e.persist()来获取event中的信息
         //useEffect变为异步清理副作用函数 ，由于进行异步处理，对于一些可变值的时候先在useEffect中进行存储
         //fiber标记优先级的expiration Time换成了lanes前者为普通数字后者为32位2进制数，计算更快而且可以标记多个优先级
 function render(vnode,container){
