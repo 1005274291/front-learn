@@ -6,6 +6,7 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
+    "start:docker":"cross-env NODE_ENV=production node --config-file nuxt.config.prod server/index.js",
     "generate": "nuxt generate",
     "test": "jest"
   },

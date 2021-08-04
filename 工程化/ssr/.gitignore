@@ -1,0 +1,4 @@
+#数据文件
+/data/
+front/node_modules
+server/node_modules
