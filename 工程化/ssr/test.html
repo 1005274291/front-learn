@@ -57,6 +57,26 @@
             console.log(scrollTop,startOffset)
             list.style.top=`${startOffset}px`
         })
+
+        var  con={
+            make:()=>{
+                console.log(this)
+                this.b()
+            },
+            b:()=>{
+                console.log(13)
+            }
+        }
+
+        function *foo(x){
+            if(x<3){
+                x= yield *foo(x+1)
+                console.log(x)
+            }
+            return x * 2
+        }
+        var it=foo(1)
+        console.log(it.next(),it.next())
     </script>
 </body>
 </html>
